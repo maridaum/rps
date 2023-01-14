@@ -1,63 +1,74 @@
+let computerChoice;
+let playerChoice;
+let playerScore = 0;
+let computerScore = 0;
+
+const rock = document.querySelector('.rock')
+rock.addEventListener('click', () => {
+    getComputerChoice();
+    playerChoice = 'rock';
+    playRound();
+    updateScore();
+})
+
+const paper = document.querySelector('.paper')
+paper.addEventListener('click', () => {
+    getComputerChoice();
+    playerChoice = 'paper';
+    playRound();
+    updateScore();
+})
+
+
+const scissors = document.querySelector('.scissors')
+scissors.addEventListener('click', () => {
+    getComputerChoice();
+    playerChoice = 'scissors';
+    playRound();
+    updateScore();
+})
+
+const narratorText = document.querySelector('.narrator-text')
+const pScore = document.querySelector('.p-score')
+const cScore = document.querySelector('.c-score')
+
 function getComputerChoice () {
     const choices=['rock', 'paper', 'scissors']
-    return choices[Math.floor(Math.random() * choices.length)]
+    computerChoice = choices[Math.floor(Math.random() * choices.length)]
 }
 
-function getPlayerChoice () {
-    let userInput = prompt('Choose your weapon! Rock, paper, or scissors?')
-    userInput = userInput.toLowerCase();
-    if (userInput !== 'rock' || userInput !== 'paper' || userInput !== 'scissors') {
-        return 'Invalid response'
-    } else {
-        return userInput;
-    }
-};
-
-
-function checkWinner (playerChoice, computerChoice) {
+ function playRound() {
     if (playerChoice === computerChoice) {
-        return 'Tie'
+        narratorText.innerText = 'Tie!'
     } else if (
         (playerChoice === 'rock' && computerChoice === 'scissors') ||
         (playerChoice === 'paper' && computerChoice === 'rock') ||
         (playerChoice === 'scissors' && computerChoice === 'paper')) {
-    return 'Player';
+        narratorText.innerText = `You win- ${playerChoice} beats ${computerChoice}.`
+        ++playerScore;
+        checkWinner()
+  
     } else {
-        return 'Computer';
-    };
- };
+        narratorText.innerText = `You lost- ${computerChoice} beats ${playerChoice}.`
+        ++computerScore;
+        checkWinner()
 
-function playRound (playerChoice, computerChoice) {
-    const result = checkWinner(playerChoice, computerChoice);
-    if (result === 'Tie') {
-        return 'Tie!'
-    } else if (result === 'Player') {
-        return `You win- ${playerChoice} beats ${computerChoice}.`
-    } else {
-        return `You lost- ${computerChoice} beats ${playerChoice}.`
+    };
+ }
+
+ function updateScore () {
+    pScore.innerText = `${playerScore}`
+    cScore.innerText = `${computerScore}`
+ }
+
+ function checkWinner() {
+    if (playerScore === 5) {
+        narratorText.innerText = `You beat the computer!`
+        playerScore = 0;
+        computerScore = 0;
+    } else if (computerScore === 5) {
+        narratorText.innerText = `The computer beat you. Try again. ):`
+        playerScore = 0;
+        computerScore = 0;
     }
- }; 
-
- 
-
-function game() {
-    let playerScore = 0;
-    let computerScore = 0;
-    for (let i = 0; i < 5; i++) {
-        const playerChoice = getPlayerChoice();
-        const computerChoice = getComputerChoice();
-        console.log(playRound (playerChoice, computerChoice));
-        if (checkWinner(playerChoice, computerChoice) === 'Player'){
-            playerScore++;
-        } else if (checkWinner(playerChoice,computerChoice) === 'Computer') {
-            computerScore++;
-        }
-    };
-    if (playerScore > computerScore) {
-        console.log(`You won! Your score is ${playerScore} and the computer score is ${computerScore}.`);
-    } else {
-        console.log(`You lost! Your score is ${playerScore} and the computer score is ${computerScore}.`)
-    };
-}
-
-game()
+ }
